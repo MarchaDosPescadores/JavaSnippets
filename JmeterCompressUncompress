@@ -1,0 +1,31 @@
+import java.util.zip.GZIPOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
+
+
+//String str = &quot;now is the time for all good men to come to aid of their country&quot;;
+String str = sampler.getArguments().getArgument(0).getValue();
+
+System.out.println(&quot;String length : &quot; + str.length());
+ByteArrayOutputStream obj = new ByteArrayOutputStream();
+GZIPOutputStream gzip = new GZIPOutputStream(obj);
+gzip.write(str.getBytes(&quot;UTF-8&quot;));
+gzip.close();
+
+sampler.getArguments().getArgument(0).setValue(obj.toString());
+		
+log.info(&quot;-------------------- after decompress ----------------------&quot;);
+		
+GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(obj.toByteArray()));
+BufferedReader bf = new BufferedReader(new InputStreamReader(gis, &quot;UTF-8&quot;));
+String outStr = &quot;&quot;;
+String line;
+while ((line=bf.readLine())!=null) {
+	outStr += line;
+}
+log.info(&quot;Output String lenght : &quot; + outStr.length());
+log.info(outStr);
+
